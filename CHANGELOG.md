@@ -3,7 +3,7 @@
 ## [2.0.0] - 2026-06-16
 
 ### 重构
-- 从「实习岗位采集器」转型为「跨境电商竞品数据监控系统」
+- 全新架构：跨境电商竞品数据监控系统
 - 数据库模型：`jobs` 表 → `products` 表（17 个电商字段）
 - 采集层：10 个公司爬虫类拆分为 `scrapers/` 子包架构
 - `BaseCrawler` → `BaseScraper`，`normalize_job` → `normalize_product`

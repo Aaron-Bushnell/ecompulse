@@ -16,8 +16,6 @@
 
 **EcomPulse** 是一款开源的跨境电商竞品监控桌面工具。它能自动采集多个电商平台（Amazon、Shopee、Lazada、Temu）的商品数据，实时追踪价格变动，检测新品上架和商品下架，并生成带颜色高亮的 Excel 报表。
 
-> 从「[实习岗位采集器](https://github.com/Aaron-Bushnell/internship-tracker)」重构而来，完整保留了增量追踪、变更检测、下架检测等核心架构，将其映射到电商竞品监控场景。
-
 ---
 
 ## ✨ 核心功能
@@ -266,7 +264,7 @@ pytest tests/ -v
 | 版本 | 日期 | 要点 |
 |:---|:---|:---|
 | 2.0.0 | 2026-06 | 重构为竞品监控系统，新增价格变动检测、4 Sheet Excel、代理支持 |
-| 1.0.0 | 2026-06 | 初始开源 (实习岗位采集器) |
+| 1.0.0 | 2026-06 | 首个开源版本 |
 
 ---
 
@@ -290,7 +288,6 @@ MIT License © 2026 Aaron Bushnell
 
 **EcomPulse** is an open-source desktop tool for cross-border e-commerce competitor monitoring. It automatically scrapes product data from multiple platforms (Amazon, Shopee, Lazada, Temu), tracks price changes in real time, detects new listings and delistings, and generates color-coded Excel reports.
 
-> Refactored from [Internship Tracker](https://github.com/Aaron-Bushnell/internship-tracker) v1.0.0, preserving its incremental tracking, change detection, and delisting detection architecture, remapped to e-commerce competitor monitoring.
 
 ## Key Features
 
