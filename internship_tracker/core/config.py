@@ -77,8 +77,6 @@ API_ENDPOINTS = {
             "Content-Type": "application/json",
             "Referer": "https://join.qq.com/",
         },
-        # FIXED: expanded from [3,5,6] to [2,3,4,5,6]
-        # 2=设计, 3=产品, 4=项目, 5=市场, 6=职能
         "business_fids": [2, 3, 4, 5, 6],
     },
     "baidu": {
@@ -147,10 +145,22 @@ API_ENDPOINTS = {
             "Accept": "application/json", "Content-Type": "application/json",
             "Referer": "https://careers.pddglobalhr.com/campus/intern",
         },
-        # FIXED: search these business keywords individually to find non-tech roles
         "search_keywords": ["产品", "运营", "市场", "设计", "商务", "职能", "人力"],
     },
 }
+
+# ========== Platform Registry (E-Commerce) ==========
+PLATFORMS = {
+    "amazon":   {"name": "Amazon",     "scraper": "api",    "enabled": True, "currency": "USD"},
+    "shopee":   {"name": "Shopee",     "scraper": "browser","enabled": True, "currency": "TWD"},
+    "lazada":   {"name": "Lazada",     "scraper": "browser","enabled": True, "currency": "THB"},
+    "temu":     {"name": "Temu",       "scraper": "browser","enabled": True, "currency": "USD"},
+}
+
+# Product category filters (placeholder -- replaces BUSINESS_KEYWORDS/TECH_KEYWORDS)
+PRODUCT_CATEGORY_FILTERS = [
+    "电子产品", "家居", "服装", "运动户外", "美妆", "玩具",
+]
 
 # Crawler defaults
 DEFAULT_PAGE_SIZE = 10
