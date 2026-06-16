@@ -1,6 +1,6 @@
 """
-Internship Tracker - Configuration
-Fixed settings for 10 major internet companies + job type filters.
+Competitor Tracker - Configuration
+Platform registry, proxy settings, and crawler defaults.
 """
 
 import os
@@ -9,18 +9,18 @@ import sys
 # Base paths
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if os.environ.get("INTERNSHIP_TRACKER_DATA_DIR"):
-    DATA_DIR = os.environ["INTERNSHIP_TRACKER_DATA_DIR"]
+if os.environ.get("ECOMPULSE_DATA_DIR"):
+    DATA_DIR = os.environ["ECOMPULSE_DATA_DIR"]
 elif sys.platform == "win32":
-    DATA_DIR = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "实习岗位采集器")
+    DATA_DIR = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "竞品监控")
 else:
-    DATA_DIR = os.path.join(os.path.expanduser("~"), ".local", "share", "internship-tracker")
+    DATA_DIR = os.path.join(os.path.expanduser("~"), ".local", "share", "ecompulse")
 
 _DB_DIR = os.path.join(DATA_DIR, "data", "tracker_app")
 os.makedirs(_DB_DIR, exist_ok=True)
 DB_PATH = os.path.join(_DB_DIR, "jobs.db")
 
-# ========== Company Registry ==========
+# ========== Company Registry (legacy — kept for reference) ==========
 COMPANIES = {
     "meituan":     {"name": "美团",     "crawler": "api_meituan",     "enabled": True},
     "tencent":     {"name": "腾讯",     "crawler": "api_tencent",     "enabled": True},
@@ -34,7 +34,7 @@ COMPANIES = {
     "pinduoduo":   {"name": "拼多多",   "crawler": "api_pinduoduo",   "enabled": True},
 }
 
-# ========== Job Type Filters ==========
+# ========== Job Type Filters (legacy) ==========
 BUSINESS_KEYWORDS = [
     "产品", "运营", "市场", "策划", "商务", "销售", "营销", "品牌", "公关",
     "职能", "人力", "HR", "财务", "行政", "法务", "采购", "供应链",
@@ -50,7 +50,7 @@ TECH_KEYWORDS = [
     "嵌入式", "芯片", "射频", "驱动", "内核", "编译器", "FPGA",
 ]
 
-# ========== API Endpoints ==========
+# ========== API Endpoints (legacy) ==========
 API_ENDPOINTS = {
     "meituan": {
         "list": "https://zhaopin.meituan.com/api/official/job/getJobList",
@@ -157,10 +157,16 @@ PLATFORMS = {
     "temu":     {"name": "Temu",       "scraper": "browser","enabled": True, "currency": "USD"},
 }
 
-# Product category filters (placeholder -- replaces BUSINESS_KEYWORDS/TECH_KEYWORDS)
+# Product category filters (placeholder — replaces BUSINESS_KEYWORDS/TECH_KEYWORDS)
 PRODUCT_CATEGORY_FILTERS = [
     "电子产品", "家居", "服装", "运动户外", "美妆", "玩具",
 ]
+
+# ========== Proxy Configuration (for Playwright browser scrapers) ==========
+PROXY_HOST = "198.105.121.200"
+PROXY_PORT = "6462"
+PROXY_USER = "vhktmowg"
+PROXY_PASS = "shduv2cr809c"
 
 # Crawler defaults
 DEFAULT_PAGE_SIZE = 10

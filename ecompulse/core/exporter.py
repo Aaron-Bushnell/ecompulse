@@ -11,7 +11,7 @@ from collections import Counter
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 
-from internship_tracker.core.config import DATA_DIR
+from ecompulse.core.config import DATA_DIR
 
 
 def export_to_excel(products, new_hashes=None, price_changes=None,

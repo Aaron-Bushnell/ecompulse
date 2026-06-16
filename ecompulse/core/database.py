@@ -7,7 +7,7 @@ import sqlite3
 import hashlib
 from datetime import datetime
 
-from internship_tracker.core.config import DB_PATH
+from ecompulse.core.config import DB_PATH
 
 
 class ProductDatabase:

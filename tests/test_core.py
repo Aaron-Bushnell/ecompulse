@@ -7,9 +7,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from internship_tracker.core.scrapers.base import BaseScraper
-from internship_tracker.core.database import ProductDatabase
-from internship_tracker.core.config import PLATFORMS
+from ecompulse.core.scrapers.base import BaseScraper
+from ecompulse.core.database import ProductDatabase
+from ecompulse.core.config import PLATFORMS
 
 
 class TestBaseScraper:

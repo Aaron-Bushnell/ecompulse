@@ -10,8 +10,8 @@ Architecture:
 import sys
 from pathlib import Path
 
-from internship_tracker.core.config import PLATFORMS
-from internship_tracker.core.scrapers import get_scraper
+from ecompulse.core.config import PLATFORMS
+from ecompulse.core.scrapers import get_scraper
 
 
 def _ensure_local_deps():

@@ -7,13 +7,13 @@ import os, sys, time, threading, webbrowser, tkinter as tk
 from datetime import datetime
 from tkinter import ttk, messagebox, filedialog
 
-from internship_tracker.utils.encoding import setup as setup_encoding
+from ecompulse.utils.encoding import setup as setup_encoding
 setup_encoding()
 
-from internship_tracker.core.config import PLATFORMS, DATA_DIR
-from internship_tracker.core.crawler import crawl_all
-from internship_tracker.core.database import ProductDatabase
-from internship_tracker.core.exporter import export_to_excel, export_to_csv
+from ecompulse.core.config import PLATFORMS, DATA_DIR
+from ecompulse.core.crawler import crawl_all
+from ecompulse.core.database import ProductDatabase
+from ecompulse.core.exporter import export_to_excel, export_to_csv
 
 
 class App:
@@ -33,6 +33,11 @@ class App:
         self._build_ui()
         self._refresh_stats()
         self._check_schedule()
+
+        # Auto-load existing products on startup
+        existing = self.db.export_all()
+        if existing:
+            self._fill_tree(existing)
 
     # ==================================================================
     # UI Construction

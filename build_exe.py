@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-PyInstaller build script for 实习岗位采集器.
+PyInstaller build script for 竞品监控.
 
 Usage:
     pip install pyinstaller
     pip install -r requirements.txt
     python build_exe.py
 
-Output: dist/实习岗位采集器/实习岗位采集器.exe (self-contained directory)
+Output: dist/竞品监控/竞品监控.exe (self-contained directory)
 """
 
 import os, shutil, subprocess, sys
@@ -51,7 +51,7 @@ def build():
         "--clean",
         f"--distpath={ROOT / 'dist'}",
         f"--workpath={ROOT / 'build'}",
-        "--add-data", f"internship_tracker{os.pathsep}internship_tracker",
+        "--add-data", f"ecompulse{os.pathsep}ecompulse",
         "--collect-all", "openpyxl",
         "--collect-all", "playwright",
     ]

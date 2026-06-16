@@ -60,8 +60,8 @@ python main.py --export
 
 ## 数据存储
 
-- **Windows**: `%LOCALAPPDATA%\实习岗位采集器\`
-- **macOS/Linux**: `~/.local/share/internship-tracker/`
+- **Windows**: `%LOCALAPPDATA%\竞品监控\`
+- **macOS/Linux**: `~/.local/share/ecompulse/`
 
 主要文件：
 - `data/tracker_app/jobs.db` — 商品数据库（SQLite，含 `products` + `price_history` 表）
@@ -72,7 +72,7 @@ python main.py --export
 
 ## 配置
 
-编辑 `internship_tracker/core/config.py` 可自定义：
+编辑 `ecompulse/core/config.py` 可自定义：
 - 启用/禁用平台（`PLATFORMS` dict）
 - 修改采集速率（`DEFAULT_MAX_PAGES` / `REQUEST_DELAY`）
 - 商品类目过滤（`PRODUCT_CATEGORY_FILTERS`）
@@ -89,7 +89,7 @@ python build_exe.py
 ## 项目架构
 
 ```
-competitor_tracker/core/
+ecompulse/core/
 ├── config.py          # 平台配置 + 过滤规则
 ├── database.py        # ProductDatabase (SQLite: products + price_history)
 ├── crawler.py         # 采集编排 (crawl_all → get_scraper)

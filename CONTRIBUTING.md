@@ -75,7 +75,7 @@ CRAWLERS = {
 ### 5. 测试
 
 ```bash
-python -c "from internship_tracker.core.crawler import crawl_company; print(len(crawl_company('newco')))"
+python -c "from ecompulse.core.crawler import crawl_company; print(len(crawl_company('newco')))"
 ```
 
 ## API 爬虫 vs 浏览器爬虫

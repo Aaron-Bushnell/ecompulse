@@ -19,9 +19,9 @@ if str(_PROJECT_ROOT) not in sys.path:
 
 def _cmd_crawl():
     """Headless one-shot crawl for competitor products."""
-    from internship_tracker.core.crawler import crawl_all
-    from internship_tracker.core.database import ProductDatabase
-    from internship_tracker.core.exporter import export_to_excel, export_to_csv
+    from ecompulse.core.crawler import crawl_all
+    from ecompulse.core.database import ProductDatabase
+    from ecompulse.core.exporter import export_to_excel, export_to_csv
 
     db = ProductDatabase()
 
@@ -51,8 +51,8 @@ def _cmd_crawl():
 
 def _cmd_export():
     """Export existing DB data without crawling."""
-    from internship_tracker.core.database import ProductDatabase
-    from internship_tracker.core.exporter import export_to_excel, export_to_csv
+    from ecompulse.core.database import ProductDatabase
+    from ecompulse.core.exporter import export_to_excel, export_to_csv
 
     db = ProductDatabase()
     products = db.export_all()
@@ -96,7 +96,7 @@ def main():
     elif args.export:
         _cmd_export()
     else:
-        from internship_tracker.gui import main as gui_main
+        from ecompulse.gui import main as gui_main
         gui_main()
 
 

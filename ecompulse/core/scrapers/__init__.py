@@ -2,13 +2,13 @@
 Competitor Tracker - Scraper Registry & Factory
 
 Usage:
-    from internship_tracker.core.scrapers import get_scraper
+    from ecompulse.core.scrapers import get_scraper
     scraper = get_scraper("amazon")
     products = scraper.crawl(log_func=print)
 """
 
-from internship_tracker.core.config import PLATFORMS
-from internship_tracker.core.scrapers.amazon_scraper import AmazonScraper
+from ecompulse.core.config import PLATFORMS
+from ecompulse.core.scrapers.amazon_scraper import AmazonScraper
 
 # Lazy registry: platform_key -> factory lambda (imported at registration time)
 _SCRAPER_REGISTRY = {
