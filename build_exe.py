@@ -14,7 +14,7 @@ import os, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-APP_NAME = "实习岗位采集器"
+APP_NAME = "竞品监控"
 
 
 def find_playwright_browsers():

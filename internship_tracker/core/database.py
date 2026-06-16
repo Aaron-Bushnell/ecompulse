@@ -86,12 +86,31 @@ class ProductDatabase:
                 );
             """)
 
-            # Auto-migrate: add price_changes column if missing from older schema
+            # Auto-migrate: adapt old crawl_runs schema
             cols = [row[1] for row in
                     conn.execute("PRAGMA table_info(crawl_runs)").fetchall()]
             if "price_changes" not in cols:
                 conn.execute(
                     "ALTER TABLE crawl_runs ADD COLUMN price_changes INTEGER DEFAULT 0")
+            # Rename legacy 'companies' column to 'platforms'
+            if "companies" in cols and "platforms" not in cols:
+                try:
+                    conn.execute(
+                        "ALTER TABLE crawl_runs RENAME COLUMN companies TO platforms")
+                except Exception:
+                    pass  # SQLite < 3.25 doesn't support RENAME COLUMN
+            # Rename legacy 'new_jobs'/'updated_jobs' columns
+            col_rename_map = {
+                "new_jobs": "new_products",
+                "updated_jobs": "updated_products",
+            }
+            for old_col, new_col in col_rename_map.items():
+                if old_col in cols and new_col not in cols:
+                    try:
+                        conn.execute(
+                            f"ALTER TABLE crawl_runs RENAME COLUMN {old_col} TO {new_col}")
+                    except Exception:
+                        pass
 
     # ==================================================================
     # Hashing

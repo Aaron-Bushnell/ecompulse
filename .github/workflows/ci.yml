@@ -63,6 +63,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 实习岗位采集器
-          path: dist/实习岗位采集器/
+          name: 竞品监控
+          path: dist/竞品监控/
           retention-days: 7
