@@ -77,83 +77,84 @@ PROXY_PASS = "password"
 
 ## 🏗️ 技术架构
 
-```
-┌──────────────────────────────────────────────────┐
-│                  数据源层                           │
-│  Amazon / Shopee / Lazada / Temu                  │
-│  ├─ API 直连 (requests)                           │
-│  └─ 浏览器模拟 (Playwright + Stealth)              │
-└────────────────────┬─────────────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────────────┐
-│              采集引擎 (scrapers/)                   │
-│  BaseScraper → AmazonScraper / ShopeeScraper ...  │
-│  ├─ is_target_product()  商品过滤                  │
-│  ├─ normalize_product()  字段标准化                 │
-│  └─ crawl() → List[dict]                          │
-└────────────────────┬─────────────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────────────┐
-│           ProductDatabase (SQLite)                 │
-│  ┌──────────────┐  ┌──────────────────┐          │
-│  │  products    │  │  price_history   │          │
-│  │  ─────────── │  │  ─────────────── │          │
-│  │  product_hash│  │  product_hash    │          │
-│  │  platform    │  │  price (old)     │          │
-│  │  title/price │  │  recorded_at     │          │
-│  │  sku/stock   │  └──────────────────┘          │
-│  │  first_seen  │                                │
-│  │  is_active   │  增量追踪逻辑:                   │
-│  └──────────────┘  ├─ 新品 → INSERT + new_cnt++   │
-│                    ├─ 存在 → UPDATE + upd_cnt++   │
-│                    ├─ 价格变 → price_history       │
-│                    └─ 消失 → is_active=0           │
-└────────────────────┬─────────────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────────────┐
-│              Exporter (openpyxl)                   │
-│  Sheet 1: 全部商品 (红涨/绿跌/黄新)                 │
-│  Sheet 2: 新品上架                                 │
-│  Sheet 3: 价格变动明细 (旧价/新价/涨跌额/涨跌幅)      │
-│  Sheet 4: 统计概览 (平台/库存/涨跌分布)              │
-│  + CSV (UTF-8 BOM)                                │
-└────────────────────┬─────────────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────────────┐
-│         main.py / gui.py (tkinter)                │
-│  CLI: --crawl / --export                          │
-│  GUI: 平台选择 → 采集 → 结果树 → 导出               │
-└──────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Sources["🌐 数据源层"]
+        direction LR
+        A1["Amazon"]
+        A2["Shopee"]
+        A3["Lazada"]
+        A4["Temu"]
+    end
+
+    subgraph Scrapers["🔍 采集引擎 (scrapers/)"]
+        B1["BaseScraper 基类"]
+        B2["is_target_product() 过滤"]
+        B3["normalize_product() 标准化"]
+        B4["crawl() → List[dict]"]
+        B1 --> B2 --> B3 --> B4
+    end
+
+    subgraph Database["🗄️ ProductDatabase (SQLite)"]
+        subgraph Tables[" "]
+            C1[("products 表<br/>product_hash<br/>platform<br/>title / price / SKU<br/>stock_status<br/>first_seen / is_active")]
+            C2[("price_history 表<br/>product_hash<br/>price (旧价格)<br/>recorded_at")]
+        end
+        C3["增量追踪: 新品→INSERT / 存在→UPDATE / 价格变→history / 消失→is_active=0"]
+    end
+
+    subgraph Export["📊 Exporter (openpyxl)"]
+        D1["Sheet 1: 全部商品<br/>🔴涨 🟢跌 🟡新"]
+        D2["Sheet 2: 新品上架"]
+        D3["Sheet 3: 价格变动明细<br/>旧价→新价 / 涨跌额 / 涨跌幅%"]
+        D4["Sheet 4: 统计概览"]
+        D5["CSV (UTF-8 BOM)"]
+    end
+
+    subgraph UI["🖥️ 入口层"]
+        E1["GUI: tkinter 桌面端"]
+        E2["CLI: --crawl / --export"]
+    end
+
+    Sources --> Scrapers
+    Scrapers --> Database
+    Database --> Export
+    Export --> UI
 ```
 
 ### 增量追踪与价格监控机制
 
-```
-每次采集的 Product → compute_hash(platform + sku_id)
-                          │
-              ┌───────────┴───────────┐
-              │ hash 在 products 表中?  │
-              ├───────────┬───────────┤
-              │    NO     │    YES    │
-              ▼           ▼           ▼
-         INSERT      UPDATE      对比 current_price
-         new_cnt++   upd_cnt++        │
-                         ┌───────────┴───────────┐
-                         │ old_price ≠ new_price? │
-                         ├───────────┬───────────┤
-                         │    YES    │    NO     │
-                         ▼           ▼           │
-                    price_history  无额外操作     │
-                    pc_cnt++                     │
-                                                 │
-              ┌──────────────────────────────────┘
-              ▼
-    mark_inactive(本轮所有 hash)
-    → 未出现的商品 → is_active = 0
+```mermaid
+flowchart TD
+    A["每次采集的 Product 列表"] --> B["compute_hash(platform + sku_id)"]
+    B --> C{"product_hash<br/>在数据库中?"}
+    
+    C -->|"❌ 不存在"| D["INSERT 新记录"]
+    D --> D1["new_cnt++"]
+    D1 --> D2["first_seen = now"]
+    
+    C -->|"✅ 已存在"| E["UPDATE 所有字段"]
+    E --> E1["upd_cnt++"]
+    E1 --> F{"current_price<br/>≠ 旧价格?"}
+    
+    F -->|"YES 💰"| G["写入 price_history"]
+    G --> G1["记录旧价格"]
+    G1 --> G2["pc_cnt++"]
+    
+    F -->|"NO"| H["无额外操作"]
+    
+    D2 --> I["标记 is_active"]
+    G2 --> I
+    H --> I
+    E1 --> I
+    
+    I --> J["mark_inactive()"]
+    J --> K["本轮未出现的商品<br/>→ is_active = 0"]
+    
+    style D fill:#ccffcc,stroke:#333
+    style E fill:#ffffcc,stroke:#333
+    style G fill:#ffcccc,stroke:#333
+    style K fill:#ffcccc,stroke:#333
 ```
 
 ---
