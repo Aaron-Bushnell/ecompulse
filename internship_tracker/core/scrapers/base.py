@@ -9,6 +9,13 @@ from datetime import datetime
 class BaseScraper:
     """Shared utilities for all e-commerce platform scrapers."""
 
+    def __init__(self):
+        self.search_terms = []
+        self.min_price = None
+        self.max_price = None
+        self.category_filter = None
+        self.currency_filter = "USD"
+
     def set_options(self, search_terms=None, min_price=None, max_price=None,
                     category=None, currency="USD"):
         """Configure scraper filters before crawling."""

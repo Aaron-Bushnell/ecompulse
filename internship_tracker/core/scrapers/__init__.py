@@ -8,10 +8,11 @@ Usage:
 """
 
 from internship_tracker.core.config import PLATFORMS
+from internship_tracker.core.scrapers.amazon_scraper import AmazonScraper
 
-# Lazy registry: platform_key -> crawler class or factory lambda
+# Lazy registry: platform_key -> factory lambda (imported at registration time)
 _SCRAPER_REGISTRY = {
-    # "amazon":   lambda: AmazonScraper(),       # TODO: step 4
+    "amazon":   lambda: AmazonScraper(),
     # "shopee":   lambda: ShopeeScraper(),       # TODO: step 4
 }
 
